@@ -1,19 +1,20 @@
 # BrandMate
-Technical Diagrammatic Explanation of LangGraph
-in BrandMate
-May 25, 2025
-Abstract
+# Technical Diagrammatic Explanation of LangGraph in BrandMate
+
+# Abstract
 This document provides a technical diagrammatic explanation of the BrandMate workflow implemented using LangGraph. The diagram illustrates the flow of the BrandMateState
 through a directed acyclic graph (DAG), with nodes representing agent functions and
 edges defining execution order. Key LangGraph operations such as add_node, add_edge,
 set_entry_point, compile, and invoke are highlighted to show how the workflow is constructed and executed.
-1 Overview
+
+# 1 Overview
 The BrandMate workflow uses LangGraph to orchestrate a sequence of agents that transform a
 user input into a LinkedIn post with engagement metrics and reinforcement learning feedback.
 The BrandMateState dictionary serves as a shared state, passed through each node (agent
 function) in a directed acyclic graph (DAG). LangGraph’s core methods (add_node, add_edge,
 set_entry_point, compile, and invoke) define and execute the workflow.
-2 State Evolution
+
+# 2 State Evolution
 The BrandMateState evolves as it passes through each node. The table below lists the keys
 added or updated by each agent:
 Table 1: BrandMateState Keys by Node
@@ -26,34 +27,18 @@ content_generator_agent post
 post_editor_agent post
 publishing_agent metrics
 rl_feedback_agent q_table, feedback
-1
-Technical Diagrammatic Explanation of LangGraph in BrandMate 2
-3 Workflow Diagram
+
+# 3 Workflow Diagram
 The diagram below illustrates the LangGraph workflow, showing the sequence of nodes and
 the state updates they perform. Each node corresponds to an agent function registered with
 workflow.add_node, and edges are defined using workflow.add_edge.
-LangGraph Technical Architecture for BrandMate
-Technical Diagrammatic Explanation of LangGraph in BrandMate 3
-user_interaction_agent
-Updates: tone, target, goal
-brand_identity_agent
-Updates: style_guide
-content_strategist_agent
-Updates: topic
-seo_agent
-Updates: seo_package
-content_generator_agent
-Updates: post
-post_editor_agent
-Updates: post
-publishing_agent
-Updates: metrics
-rl_feedback_agent
-Updates: q_table, feedback
-ENDtone, target, goal style_guide topic seo_package post post metrics q_table, feedback
-LangGraph Technical Architecture for BrandMate
-Technical Diagrammatic Explanation of LangGraph in BrandMate 4
-4 LangGraph Implementation
+
+# LangGraph Technical Architecture for BrandMate
+![image](https://github.com/user-attachments/assets/3a0f5015-088b-48be-a022-f0da805253e4)
+
+
+# 4 LangGraph Implementation
+
 The workflow is constructed using LangGraph’s StateGraph class. Below is the code that sets
 up the graph, with annotations explaining each operation:
 1 from langgraph . graph import StateGraph , END
@@ -101,11 +86,9 @@ post , emotional tone , for women startup founders , to grow
 followers "}
 34 result = app . invoke ( initial_state ) % Executes the graph , passing
 state through nodes
-Listing 1: LangGraph Workflow Construction
-5 Technical Workflow
+
+# 5 Technical Workflow
 The workflow operates as follows:
-LangGraph Technical Architecture for BrandMate
-Technical Diagrammatic Explanation of LangGraph in BrandMate 5
 ▷ Initialization: The StateGraph is initialized with BrandMateState, a typed dictionary
 defining keys like user_input, tone, and post.
 ▷ Node Registration: Each agent function is registered using workflow.add_node(node_id,
@@ -130,8 +113,8 @@ tone , for women startup founders , to grow followers "
 6 print (" Metrics :", result [" metrics "])
 7 print (" Feedback :", result [" feedback "])
 8 print ("Q- table :", result [" q_table "])
-Listing 2: Example Invocation and Output
-7 Conclusion
+
+# 7 Conclusion
 The BrandMate workflow leverages LangGraph’s StateGraph to create a modular, stateful
 pipeline. The diagram and code snippets illustrate how add_node, add_edge, set_entry_point,
 compile, and invoke orchestrate the flow of BrandMateState through agent functions. This
