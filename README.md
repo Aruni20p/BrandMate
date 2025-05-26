@@ -41,78 +41,93 @@ workflow.add_node, and edges are defined using workflow.add_edge.
 
 The workflow is constructed using LangGraph’s StateGraph class. Below is the code that sets
 up the graph, with annotations explaining each operation:
-1 from langgraph . graph import StateGraph , END
-2
-3 # Initialize the StateGraph with BrandMateState
-4 workflow = StateGraph ( BrandMateState )
-5
-6 # Register nodes ( agent functions ) using add_node
-7 workflow . add_node (" user_interaction ", user_interaction_agent ) % Maps
+
+from langgraph . graph import StateGraph , END
+
+workflow = StateGraph ( BrandMateState )
+
+
+workflow . add_node (" user_interaction ", user_interaction_agent ) % Maps
 input to state
-8 workflow . add_node (" brand_identity ", brand_identity_agent ) %
+
+workflow . add_node (" brand_identity ", brand_identity_agent ) %
 Defines style guide
-9 workflow . add_node (" content_strategist ", content_strategist_agent ) %
+
+workflow . add_node (" content_strategist ", content_strategist_agent ) %
 Selects topic
-10 workflow . add_node (" seo ", seo_agent ) %
+workflow . add_node (" seo ", seo_agent ) %
 Fetches SEO data
-11 workflow . add_node (" content_generator ", content_generator_agent ) %
+
+workflow . add_node (" content_generator ", content_generator_agent ) %
 Generates post
-12 workflow . add_node (" post_editor ", post_editor_agent ) %
+
+workflow . add_node (" post_editor ", post_editor_agent ) %
 Refines post
-13 workflow . add_node (" publishing ", publishing_agent ) %
+
+workflow . add_node (" publishing ", publishing_agent ) %
 Simulates posting
-14 workflow . add_node (" rl_feedback ", rl_feedback_agent ) %
+
+workflow . add_node (" rl_feedback ", rl_feedback_agent ) %
 Computes Q - learning feedback
-15
-16 # Define edges to specify execution order
-17 workflow . add_edge (" user_interaction ", " brand_identity ")
-18 workflow . add_edge (" brand_identity ", " content_strategist ")
-19 workflow . add_edge (" content_strategist ", " seo ")
-20 workflow . add_edge (" seo ", " content_generator ")
-21 workflow . add_edge (" content_generator ", " post_editor ")
-22 workflow . add_edge (" post_editor ", " publishing ")
-23 workflow . add_edge (" publishing ", " rl_feedback ")
-24 workflow . add_edge (" rl_feedback ", END )
-25
-26 # Set the entry point for execution
-27 workflow . set_entry_point (" user_interaction ")
-28
-29 # Compile the graph into an executable app
-30 app = workflow . compile ()
-31
-32 # Invoke the workflow with an initial state
-33 initial_state = {" user_input ": " Create a high - engagement LinkedIn
+
+
+workflow . add_edge (" user_interaction ", " brand_identity ")
+workflow . add_edge (" brand_identity ", " content_strategist ")
+workflow . add_edge (" content_strategist ", " seo ")
+workflow . add_edge (" seo ", " content_generator ")
+workflow . add_edge (" content_generator ", " post_editor ")
+workflow . add_edge (" post_editor ", " publishing ")
+workflow . add_edge (" publishing ", " rl_feedback ")
+workflow . add_edge (" rl_feedback ", END )
+
+workflow . set_entry_point (" user_interaction ")
+
+app = workflow . compile ()
+
+initial_state = {" user_input ": " Create a high - engagement LinkedIn
 post , emotional tone , for women startup founders , to grow
 followers "}
-34 result = app . invoke ( initial_state ) % Executes the graph , passing
+
+result = app . invoke ( initial_state ) % Executes the graph , passing
 state through nodes
 
 # 5 Technical Workflow
 The workflow operates as follows:
 ▷ Initialization: The StateGraph is initialized with BrandMateState, a typed dictionary
 defining keys like user_input, tone, and post.
+
 ▷ Node Registration: Each agent function is registered using workflow.add_node(node_id,
 function), mapping a unique identifier to its corresponding function.
+
 ▷ Edge Definition: Edges are added with workflow.add_edge(from_node, to_node) to
 define the sequential flow from user_interaction to END.
+
 ▷ Entry Point: workflow.set_entry_point("user_interaction") specifies the starting
 node.
+
 ▷ Compilation: workflow.compile() creates an executable app that manages state transitions.
+
 ▷ Execution: app.invoke(initial_state) runs the graph, passing the BrandMateState
 through each node. Each agent reads and updates the state, which is propagated to the
 next node until reaching END.
-6 Example Execution
+
+# 6 Example Execution
 The workflow is invoked with an initial state, and the final output includes the generated post,
 metrics, and feedback:
-1 initial_state = {
-2 " user_input ": " Create a high - engagement LinkedIn post , emotional
-tone , for women startup founders , to grow followers "
-3 }
-4 result = app . invoke ( initial_state )
-5 print (" Generated Post :", result [" post "])
-6 print (" Metrics :", result [" metrics "])
-7 print (" Feedback :", result [" feedback "])
-8 print ("Q- table :", result [" q_table "])
+
+initial_state = {
+" user_input ": " Create a high - engagement LinkedIn post , emotional
+tone , for women startup founders , to grow followers "}
+
+result = app . invoke ( initial_state )
+
+print (" Generated Post :", result [" post "])
+
+print (" Metrics :", result [" metrics "])
+
+print (" Feedback :", result [" feedback "])
+
+print ("Q- table :", result [" q_table "])
 
 # 7 Conclusion
 The BrandMate workflow leverages LangGraph’s StateGraph to create a modular, stateful
